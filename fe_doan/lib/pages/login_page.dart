@@ -5,11 +5,12 @@ import "package:fe_doan/components/my_button.dart";
 import "package:fe_doan/components/my_textfield.dart";
 import "package:fe_doan/components/square_title.dart";
 import 'package:fe_doan/models/storage_item.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fe_doan/services/storage_service.dart';
 
 class Student {
-  final String? id;
-  final String? accessToken;
+  final String id;
+  final String accessToken;
 
   Student({required this.id, required this.accessToken});
 
@@ -21,7 +22,7 @@ class Student {
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
-
+  final StorageService _storageService = StorageService();
   // text editing controllers
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
@@ -39,10 +40,7 @@ class LoginPage extends StatelessWidget {
       }),
     );
     // final dataForSave = json.decode(response.body) as Map<String, dynamic>;
-    print(json.decode(response.body));
     return Student.fromJson(json.decode(response.body));
-    // final StorageService _storageService = StorageService("token", response.body.accessToken);
-    // _storageService.writeSecureData(newItem)
   }
 
   Future<void> printPackageInformation() async {
@@ -50,10 +48,19 @@ class LoginPage extends StatelessWidget {
 
     packageInfo = await signUserIn();
 
-    print('Latest version: ${packageInfo.id}');
-    print('Description: ${packageInfo.accessToken}');
-    // final StorageItem storageItem =
-    //     StorageItem(packageInfo.id, packageInfo.accessToken);
+    final StorageItem storageItem = StorageItem("id", packageInfo.id);
+    await _storageService.writeSecureData(storageItem);
+    final StorageItem storageItem2 =
+        StorageItem("accessToken", packageInfo.accessToken);
+    await _storageService.writeSecureData(storageItem2);
+    getAllStorage();
+  }
+
+  Future<void> getAllStorage() async {
+    final value = await _storageService.readAllSecureData();
+    for (var i in value) {
+      i.Println();
+    }
   }
 
   @override
