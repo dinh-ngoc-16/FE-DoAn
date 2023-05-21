@@ -7,6 +7,7 @@ import "package:fe_doan/components/square_title.dart";
 import 'package:fe_doan/models/storage_item.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fe_doan/services/storage_service.dart';
+import './menu_info.dart';
 
 class Student {
   final String id;
@@ -43,7 +44,7 @@ class LoginPage extends StatelessWidget {
     return Student.fromJson(json.decode(response.body));
   }
 
-  Future<void> printPackageInformation() async {
+  Future<void> printPackageInformation(context) async {
     final Student packageInfo;
 
     packageInfo = await signUserIn();
@@ -54,6 +55,7 @@ class LoginPage extends StatelessWidget {
         StorageItem("accessToken", packageInfo.accessToken);
     await _storageService.writeSecureData(storageItem2);
     getAllStorage();
+    navigateTo("/home", context);
   }
 
   Future<void> getAllStorage() async {
@@ -61,6 +63,10 @@ class LoginPage extends StatelessWidget {
     for (var i in value) {
       i.Println();
     }
+  }
+
+  navigateTo(String route, BuildContext context) {
+    Navigator.of(context).pushReplacementNamed(route);
   }
 
   @override
@@ -75,7 +81,11 @@ class LoginPage extends StatelessWidget {
               const SizedBox(height: 50),
 
               // logo
-              const SquareTile(imagePath: 'lib/images/logo_van_lang.png'),
+              const SquareTile(
+                imagePath: 'lib/images/logo_van_lang.png',
+                circular: 16,
+                size: 250,
+              ),
 
               const SizedBox(height: 50),
 
@@ -115,7 +125,7 @@ class LoginPage extends StatelessWidget {
 
               // sign in button
               MyButton(
-                onTap: printPackageInformation,
+                onTap: () => printPackageInformation(context),
               ),
 
               const SizedBox(height: 220),
