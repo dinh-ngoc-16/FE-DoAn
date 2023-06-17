@@ -1,215 +1,339 @@
-import "package:fe_doan/services/storage_service.dart";
 import 'package:flutter/material.dart';
-import "package:http/http.dart" as http;
-import "dart:convert";
 
-class Detail {
-  String? sId;
-  String? tenSV;
-  List<String>? mH;
-  String? mSSV;
-  int? sDT;
-  String? khoa;
-  String? lopSV;
-  String? pass;
-  String? userName;
+class MenuInfo extends StatefulWidget {
+  const MenuInfo({Key? key}) : super(key: key);
 
-  Detail(
-      {this.sId,
-      this.tenSV,
-      this.mH,
-      this.mSSV,
-      this.sDT,
-      this.khoa,
-      this.lopSV,
-      this.pass,
-      this.userName});
-
-  Detail.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    tenSV = json['tenSV'];
-    mH = json['MH'].cast<String>();
-    mSSV = json['MSSV'];
-    sDT = json['SDT'];
-    khoa = json['khoa'];
-    lopSV = json['lopSV'];
-    pass = json['pass'];
-    userName = json['userName'];
-  }
-
-  // Map<String, dynamic> toJson() {
-  //   final Map<String, dynamic> data = new Map<String, dynamic>();
-  //   data['_id'] = this.sId;
-  //   data['tenSV'] = this.tenSV;
-  //   data['MH'] = this.mH;
-  //   data['MSSV'] = this.mSSV;
-  //   data['SDT'] = this.sDT;
-  //   data['khoa'] = this.khoa;
-  //   data['lopSV'] = this.lopSV;
-  //   data['pass'] = this.pass;
-  //   data['userName'] = this.userName;
-  //   return data;
-  // }
+  @override
+  State<MenuInfo> createState() => _menuInfo();
 }
 
-// class Menu extends StatefulWidget {
-//   const Menu({Key? key}) : super(key: key);
-
-//   @override
-//   State<Menu> createState() => MenuInfo();
-// }
-
-class MenuInfo extends StatelessWidget {
-  static String routeName = "/detail";
-  String nameStudent = "Dinh";
-
-  // @override
-  // void initState() {
-  //   printPackageInformation();
-  // }
-
-  final StorageService _storageService = StorageService();
-  Future<Detail> getDataStudent() async {
-    final id = await _storageService.readSecureData("id");
-    final accessToken = await _storageService.readSecureData("accessToken");
-
-    var response = await http.get(
-      Uri.parse('http://10.0.2.2:3500/student/$id'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'token': 'Bearers $accessToken'
-      },
-    );
-    // final dataForSave = json.decode(response.body) as Map<String, dynamic>;
-    return Detail.fromJson(json.decode(response.body));
+// ignore: camel_case_types
+class _menuInfo extends State<MenuInfo> {
+  @override
+  void initState() {
+    super.initState();
   }
-
-  // Future<void> getAllStorage() async {
-  //   final value = await _storageService.readSecureData("id");
-  // for (var i in value) {
-  //   i.Println();
-  // }
-  //   print(value);
-  // }
-  // Future<void> printPackageInformation() async {
-  //   final Detail packageInfo;
-
-  //   packageInfo = await getDataStudent();
-
-  //   print(packageInfo.tenSV);
-  //   String? tenSv = packageInfo.tenSV;
-  //   String? mssv = packageInfo.mSSV;
-  //   nameStudent = "$mssv-$tenSv";
-  // final StorageItem storageItem = StorageItem("id", packageInfo.id);
-  // await _storageService.writeSecureData(storageItem);
-  // final StorageItem storageItem2 =
-  //     StorageItem("accessToken", packageInfo.accessToken);
-  // await _storageService.writeSecureData(storageItem2);
-  // getAllStorage();
-  // navigateTo("/home", context);
-  // }
 
   navigateTo(String route, BuildContext context) {
-    Navigator.of(context).pushReplacementNamed(route);
+    Navigator.pushNamed(context, route);
   }
 
-  onTap() {}
   @override
   Widget build(BuildContext context) {
     // printPackageInformation();
     return Scaffold(
-      backgroundColor: Colors.grey[300],
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(height: 100),
-
-              // logo
-              // const SquareTile(imagePath: 'lib/images/logo_van_lang.png'),
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.red, width: 5),
+      backgroundColor: const Color(0xFFF0F4FD),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.red.shade600,
+        title: const Text('Menu'),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Padding(padding: EdgeInsets.fromLTRB(0, 15, 0, 0)),
+            Container(
+              padding: const EdgeInsets.all(20),
+              height: 170,
+              width: 170,
+              decoration: BoxDecoration(
+                  border: Border.all(
+                      color: const Color.fromARGB(255, 20, 68, 171), width: 5),
                   borderRadius: BorderRadius.circular(500),
                   color: Colors.grey[200],
-                ),
-                child: Image.asset(
-                  'lib/images/boy.png',
-                  height: 150,
-                ),
-              ),
-
-              const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-              Text(
-                nameStudent,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-
-              const Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 30)),
-
-              GestureDetector(
-                onTap: onTap,
-                child: Container(
-                    padding: const EdgeInsets.all(20),
-                    margin: const EdgeInsets.symmetric(horizontal: 25),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
-                      children: [
-                        const Padding(
-                            padding: EdgeInsets.fromLTRB(20, 0, 20, 0)),
-                        Image.asset(
-                          'lib/images/user.png',
-                          height: 30,
-                        ),
-                        const Padding(
-                            padding: EdgeInsets.fromLTRB(10, 0, 20, 0)),
-                        const Center(
-                          child: Text(
-                            "student profile",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                  image: const DecorationImage(
+                      fit: BoxFit.cover,
+                      image: AssetImage(
+                        'lib/images/boy.png',
+                      ))),
+            ),
+            const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
+            Column(children: const <Widget>[
+              SizedBox(
+                  height: 50,
+                  child: Text(
+                    "Xin Chào",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ))
+            ]),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                  onTap: () => navigateTo("/detail", context),
+                  child: Container(
+                      height: 150,
+                      width: 150,
+                      // padding: const EdgeInsets.all(20),
+                      // margin: const EdgeInsets.symmetric(horizontal: 25),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'lib/images/user.png',
+                            height: 30,
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
+                          const Center(
+                            child: Text(
+                              "Thông tin sinh viên",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    )),
-              ),
-              const SizedBox(height: 25),
-              GestureDetector(
-                onTap: () => navigateTo('/login', context),
-                child: Container(
-                  padding: const EdgeInsets.all(25),
-                  margin: const EdgeInsets.symmetric(horizontal: 25),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      "Back",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
+                        ],
+                      )),
                 ),
-              ),
-              const SizedBox(height: 220),
-            ],
-          ),
+                GestureDetector(
+                  onTap: () => navigateTo("/schedule", context),
+                  child: Container(
+                      height: 150,
+                      width: 150,
+                      // padding: const EdgeInsets.all(20),
+                      // margin: const EdgeInsets.symmetric(horizontal: 25),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'lib/images/calendar.png',
+                            height: 30,
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
+                          const Center(
+                            child: Text(
+                              "Lịch Học",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+                ),
+              ],
+            ),
+            const SizedBox(height: 25),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                  onTap: () => navigateTo("/schedule_test", context),
+                  child: Container(
+                      height: 150,
+                      width: 150,
+                      // padding: const EdgeInsets.all(20),
+                      // margin: const EdgeInsets.symmetric(horizontal: 25),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'lib/images/list_check.png',
+                            height: 30,
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
+                          const Center(
+                            child: Text(
+                              "Lịch thi",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+                ),
+                GestureDetector(
+                  onTap: () => navigateTo("/list-result", context),
+                  child: Container(
+                      height: 150,
+                      width: 150,
+                      // padding: const EdgeInsets.all(20),
+                      // margin: const EdgeInsets.symmetric(horizontal: 25),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'lib/images/test.png',
+                            height: 30,
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
+                          const Center(
+                            child: Text(
+                              "Kết quả học tập",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+                ),
+              ],
+            ),
+            const SizedBox(height: 25),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                  onTap: () => navigateTo("/schedule", context),
+                  child: Container(
+                      height: 150,
+                      width: 150,
+                      // padding: const EdgeInsets.all(20),
+                      // margin: const EdgeInsets.symmetric(horizontal: 25),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'lib/images/money_check.png',
+                            height: 30,
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
+                          const Center(
+                            child: Text(
+                              "Tài chính sinh viên",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+                ),
+                GestureDetector(
+                  onTap: () => navigateTo("/question-menu", context),
+                  child: Container(
+                      height: 150,
+                      width: 150,
+                      // padding: const EdgeInsets.all(20),
+                      // margin: const EdgeInsets.symmetric(horizontal: 25),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'lib/images/messages-question.png',
+                            height: 30,
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
+                          const Center(
+                            child: Text(
+                              "Thắc mắc",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+                ),
+              ],
+            ),
+            const Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 20))
+          ],
         ),
       ),
     );

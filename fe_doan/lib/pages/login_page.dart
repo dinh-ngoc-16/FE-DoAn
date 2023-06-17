@@ -5,9 +5,7 @@ import "package:fe_doan/components/my_button.dart";
 import "package:fe_doan/components/my_textfield.dart";
 import "package:fe_doan/components/square_title.dart";
 import 'package:fe_doan/models/storage_item.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fe_doan/services/storage_service.dart';
-import './menu_info.dart';
 
 class Student {
   final String id;
@@ -54,7 +52,6 @@ class LoginPage extends StatelessWidget {
     final StorageItem storageItem2 =
         StorageItem("accessToken", packageInfo.accessToken);
     await _storageService.writeSecureData(storageItem2);
-    getAllStorage();
     navigateTo("/home", context);
   }
 
@@ -66,17 +63,18 @@ class LoginPage extends StatelessWidget {
   }
 
   navigateTo(String route, BuildContext context) {
-    Navigator.of(context).pushReplacementNamed(route);
+    Navigator.pushNamed(context, route);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
-      body: SafeArea(
+      body: SingleChildScrollView(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 50),
 
@@ -128,7 +126,7 @@ class LoginPage extends StatelessWidget {
                 onTap: () => printPackageInformation(context),
               ),
 
-              const SizedBox(height: 220),
+              const SizedBox(height: 50),
             ],
           ),
         ),
