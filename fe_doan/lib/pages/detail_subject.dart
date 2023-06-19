@@ -1,3 +1,4 @@
+import "package:fe_doan/models/storage_item.dart";
 import "package:http/http.dart" as http;
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
@@ -245,9 +246,15 @@ class _detailSubject extends State<detailSubject> {
   //     builder: (BuildContext context) => const detailSubject(),
   //   );
   // }
-
-  navigateTo(BuildContext context) {
-    Navigator.pop(context);
+  navigateTo(BuildContext context, String type) async {
+    if (type == 'back') {
+      Navigator.pop(context);
+    } else {
+      final idLopHoc = await _storageService.readSecureData("idLopHoc");
+      final StorageItem storageItem = StorageItem("idResult", idLopHoc!);
+      await _storageService.writeSecureData(storageItem);
+      await Navigator.pushNamed(context, '/result_detail');
+    }
   }
 
   @override
@@ -516,7 +523,34 @@ class _detailSubject extends State<detailSubject> {
                   GestureDetector(
                     // onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
                     //     '/home', (Route<dynamic> route) => false),
-                    onTap: () => navigateTo(context),
+                    onTap: () => navigateTo(context, 'detail'),
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      margin: const EdgeInsets.symmetric(horizontal: 25),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        border: Border.all(color: Colors.red),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "Kết quả",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  GestureDetector(
+                    // onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
+                    //     '/home', (Route<dynamic> route) => false),
+                    onTap: () => navigateTo(context, 'back'),
                     child: Container(
                       padding: const EdgeInsets.all(20),
                       margin: const EdgeInsets.symmetric(horizontal: 25),

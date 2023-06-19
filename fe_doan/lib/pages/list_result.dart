@@ -36,7 +36,7 @@ class Data {
   String? sId;
   IdLopHoc? idLopHoc;
   bool? pass;
-  int? tongDiem;
+  dynamic tongDiem;
 
   Data({this.sId, this.idLopHoc, this.pass, this.tongDiem});
 
@@ -146,11 +146,11 @@ class _ListResult extends State<ListResult> {
     }
   }
 
-  goToDetail(BuildContext context, String idTestDate) async {
-    final StorageItem storageItem = StorageItem("idTestDate", idTestDate);
+  goToDetail(BuildContext context, String idResult) async {
+    final StorageItem storageItem = StorageItem("idResult", idResult);
     await _storageService.writeSecureData(storageItem);
     // ignore: use_build_context_synchronously
-    navigateTo(context, '/test_detail');
+    navigateTo(context, '/result_detail');
   }
 
   navigateTo(BuildContext context, String route) {
@@ -208,22 +208,6 @@ class _ListResult extends State<ListResult> {
                                               Container(
                                                 margin:
                                                     const EdgeInsets.fromLTRB(
-                                                        0, 0, 0, 10),
-                                                child: Text(
-                                                  snapshot
-                                                      .data!
-                                                      .data![index]
-                                                      .idLopHoc!
-                                                      .idMonHoc!
-                                                      .maMonHoc
-                                                      .toString(),
-                                                  style: const TextStyle(
-                                                      fontSize: 20),
-                                                ),
-                                              ),
-                                              Container(
-                                                margin:
-                                                    const EdgeInsets.fromLTRB(
                                                         0, 10, 0, 0),
                                                 child: Text(
                                                   snapshot
@@ -236,35 +220,66 @@ class _ListResult extends State<ListResult> {
                                                   style: const TextStyle(
                                                       fontSize: 20),
                                                 ),
-                                              )
-                                            ]),
-                                        Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
+                                              ),
                                               Container(
                                                 margin:
                                                     const EdgeInsets.fromLTRB(
                                                         0, 0, 0, 10),
                                                 child: Text(
                                                   snapshot
-                                                      .data!.data![index].pass
+                                                      .data!
+                                                      .data![index]
+                                                      .idLopHoc!
+                                                      .idMonHoc!
+                                                      .maMonHoc
                                                       .toString(),
                                                   style: const TextStyle(
-                                                      fontSize: 20),
+                                                      fontSize: 16,
+                                                      color: Color.fromARGB(
+                                                          255, 108, 108, 108)),
                                                 ),
                                               ),
-                                              Container(
-                                                margin:
-                                                    const EdgeInsets.fromLTRB(
-                                                        0, 10, 0, 0),
-                                                child: Text(
-                                                  snapshot.data!.data![index]
-                                                      .tongDiem
-                                                      .toString(),
-                                                  style: const TextStyle(
-                                                      fontSize: 20),
-                                                ),
+                                            ]),
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  if (snapshot.data!
+                                                          .data![index].pass ??
+                                                      false) ...[
+                                                    Container(
+                                                      margin: const EdgeInsets
+                                                              .fromLTRB(
+                                                          0, 0, 10, 0),
+                                                      child: const Text(
+                                                        'Đạt',
+                                                        style: TextStyle(
+                                                            fontSize: 18),
+                                                      ),
+                                                    ),
+                                                    Image.asset(
+                                                      "lib/images/check-circle.png",
+                                                      height: 25,
+                                                    )
+                                                  ] else ...[
+                                                    Container(
+                                                      margin: const EdgeInsets
+                                                              .fromLTRB(
+                                                          0, 0, 10, 0),
+                                                      child: const Text(
+                                                        'Không đạt',
+                                                        style: TextStyle(
+                                                            fontSize: 18),
+                                                      ),
+                                                    ),
+                                                    Image.asset(
+                                                      "lib/images/cross-circle.png",
+                                                      height: 25,
+                                                    )
+                                                  ]
+                                                ],
                                               ),
                                             ])
                                       ],

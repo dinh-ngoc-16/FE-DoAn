@@ -1,3 +1,4 @@
+import 'package:fe_doan/pages/detail_result.dart';
 import 'package:fe_doan/pages/detail_test.dart';
 import 'package:fe_doan/pages/detail_student.dart';
 import 'package:fe_doan/pages/list_result.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         "/subject_detail": (BuildContext context) => const detailSubject(),
         "/test_detail": (BuildContext context) => const detailTest(),
         "/list-result": (BuildContext context) => const ListResult(),
+        "/result_detail": (BuildContext context) => const detailResult(),
         "/question-menu": (BuildContext context) => const QuestionMenu(),
       },
       initialRoute: "/login",
